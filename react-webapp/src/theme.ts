@@ -3,7 +3,7 @@ import { extendTheme, keyframes } from "@chakra-ui/react";
 import bgsvg from "./assets/bg.svg"
 import logo from "./assets/logo.png"
 
-const primary = "#FC9F4D"
+const primary = "##f58cec"
 const secondary = "#34568b"
 const white = "#cfd9df"
 
@@ -33,77 +33,33 @@ const customTheme = extendTheme({
     }
   },
   colors: {
-    primary: primary,
+    primary: {
+      100: primary,
+    },
     secondary: secondary,
   },
   components: {
+    Box: {
+      baseStyle: {
+        w:"100px",
+        bg:"red.300"
+      },
+      defaultProps: {},
+    },
     Button: {
       baseStyle: {
         borderRadius: "3px",
       },
-
       variants: {
-        solid: {
-
-        },
-        outlineGhost: {
-          // borderColor: "none",
-          _hover: {
-            _before: {
-              content: "''",
-              position: "absolute",
-              border:"1px",
-              color: white,
-              top: "0px",
-              left: "0px",
-              bottom: "0px",
-              right: "0px",
-              zIndex: "-1",
-            },
-            borderColor: white,
-          }
-        },
-        gradient: {
-          backgroundImage: "linear-gradient(to right, #fbc2eb 0%, #a6c1ee 51%, #fbc2eb 100%)",
-          backgroundSize: "200% auto",
-          transition: "0.5s",
-          _hover: {
-            backgroundImage: "linear-gradient(to right, #fbc2eb 0%, #a6c1ee 51%, #fbc2eb 100%)",
-            backgroundSize: "200% auto",
-            backgroundPosition: "right center",
-            transform: "scale(1.2)"
-          }
-        },
-        image: {
-          _hover: {
-            transform: "scale(1.5)"
-          }
-        }
+        solid: {},
+        gradient: {},
       }
-    },
-    Text: {
-      variants: {
-        "1": {
-          color: "whiteColor",
-        },
-      },
     },
     Heading: {
       baseStyle: {
         color: white,
       },
-      variants: {
-        "1": {
-          color: "whiteColor",
-          fontSize: "44px",
-          lineHeight: "60px",
-        },
-        "2": {
-          color: "whiteColor",
-          fontSize: "32px",
-          lineHeight: "60px",
-        },
-      },
+      variants: {},
     },
   },
 });

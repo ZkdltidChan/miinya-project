@@ -1,8 +1,8 @@
 import {
   ChakraProvider,
   Box,
-  Grid,
 } from "@chakra-ui/react"
+import { NavBar } from "./components/NavBar/NavBar";
 import customTheme from "./theme"
 import { Home } from "./pages/Home/Home"
 
@@ -12,15 +12,14 @@ export const App = () => {
   return (
     < ChakraProvider theme={customTheme} >
       <Box textAlign="center" fontSize="xl">
-        <Grid>
-              <BrowserRouter>
-                <Box pt={{ base: 1, md: "80px" }}>
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                  </Routes>
-                </Box>
-              </BrowserRouter>
-        </Grid>
+        <NavBar/>
+        <BrowserRouter>
+          <Box pt={{ base: 1, md: "80px" }}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+            </Routes>
+          </Box>
+        </BrowserRouter>
       </Box>
     </ChakraProvider >
   )

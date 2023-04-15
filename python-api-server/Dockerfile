@@ -11,7 +11,6 @@ ENV FLASK_APP=server.py
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=5000
 
-# Expose the port
 EXPOSE 5000
 
 

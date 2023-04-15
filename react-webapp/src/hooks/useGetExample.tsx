@@ -6,7 +6,7 @@ interface Example {
   data: string;
 }
 
-const getApiExample = () => {
+const useGetExample = () => {
   const [example, setExample] = useState<Example>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -15,7 +15,7 @@ const getApiExample = () => {
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("http://localhost:5001");
+        const response = await axios.get("http://localhost:5001/");
         const data = await response.data;
         setExample({data: data});
         setIsLoading(false);
@@ -30,4 +30,4 @@ const getApiExample = () => {
   return { example, isLoading, error };
 };
 
-export default getApiExample;
+export default useGetExample;

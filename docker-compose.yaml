@@ -5,7 +5,7 @@ services:
     volumes:
       - ./react-webapp:/usr/src/app
     ports:
-      - "3000:3000"
+      - "${REACT_PORT}:3000"
     depends_on:
       - python-api-server
 
@@ -14,4 +14,4 @@ services:
     volumes:
       - ./python-api-server:/usr/src/app
     ports:
-      - "5000:5000"
+      - "${API_PORT}:5000"
