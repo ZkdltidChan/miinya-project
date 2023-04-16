@@ -1,13 +1,15 @@
 version: '3'
 services:
-  # react-webapp:
-  #   build: ./react-webapp
-  #   volumes:
-  #     - ./react-webapp:/usr/src/app
-  #   ports:
-  #     - "${REACT_PORT}:3000"
-  #   depends_on:
-  #     - python-api-server
+  react-webapp:
+    build: ./react-webapp
+    volumes:
+      - ./react-webapp:/usr/src/app
+    ports:
+      - "${REACT_PORT}:3000"
+    environment:
+      REACT_APP_API_HOST: "http://python-api-server:5000"
+    depends_on:
+      - python-api-server
 
   python-api-server:
     build: ./python-api-server

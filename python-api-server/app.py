@@ -1,5 +1,5 @@
 # from flask import Flask
-# from flask_cors import CORS, cross_origin
+from flask_cors import CORS, cross_origin
 
 # server = Flask(__name__)
 # CORS(server)  # allow all origins all methods.
@@ -23,6 +23,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+CORS(app)  # allow all origins all methods.
+ALLOW_ORIGINS = ["*"]
 app.register_blueprint(todo_api, url_prefix='/api/v1')
 
 db.init_app(app)

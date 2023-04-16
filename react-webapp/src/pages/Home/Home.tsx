@@ -117,6 +117,7 @@ export const Home = () => {
 
     // api requrst with hooks
     const { example, isLoading, error } = useGetProducts();
+    console.log(process.env.REACT_APP_API_HOST);
 
     const [tabIndex, setTabIndex] = useState<number>(0);
     if (isLoading) {
@@ -130,7 +131,7 @@ export const Home = () => {
         <>
             <Box>
                 <VStack spacing="18px">
-                    {/* {example?.data} */}
+                    {example?.data}
                     <ImageList display='one' size="300px" data_list={fakeDatas} />
                     <VStack pt="20px" w="100%" px="10px">
                         <Button w="100%"> 상단 띠배너 영역 </Button>

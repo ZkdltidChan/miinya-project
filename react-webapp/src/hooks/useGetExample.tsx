@@ -15,12 +15,13 @@ const useGetExample = () => {
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("http://localhost:5001/");
+        const response = await axios.get( "/api/v1");
         const data = await response.data;
         setExample({data: data});
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
+        console.log(error)
         setError("An error occurred while fetching the examplies.");
       }
     };
