@@ -24,8 +24,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 CORS(app)  # allow all origins all methods.
-ALLOW_ORIGINS = ["*"]
+CORS(app, resources={r'*': {'origins': '*'}})
+
+@app.route('/api/v1')
+def hello():
+    return 'hello word'
+
 app.register_blueprint(todo_api, url_prefix='/api/v1')
+
+
 
 db.init_app(app)
 with app.app_context():
