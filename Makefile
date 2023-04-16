@@ -2,7 +2,7 @@ conf:
 	docker-compose --env-file ./config/.env.dev config
 
 run:
-	docker compose --env-file ./config/.env.dev up
+	docker compose --env-file ./config/.env.dev up --build
 
 run_prod:
 	docker compose --env-file ./config/.env.prod up -d
