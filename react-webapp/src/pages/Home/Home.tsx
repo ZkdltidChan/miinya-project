@@ -1,7 +1,8 @@
 import { Box, Button, Container, HStack, Image, Text, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, Heading } from '@chakra-ui/react'
 import { useState } from 'react';
 import { ImageList, DataProp } from '../../components/ImageList/ImageList';
-import useGetProducts from '../../hooks/useGetExample'
+
+// import useGetProducts from '../../hooks/useGetExample'
 
 
 type TabProp = {
@@ -116,22 +117,22 @@ export const Home = () => {
     const tabs = ["실시간 순위", "이번 주 신작", "카테고리 추천", "내가보던"]
 
     // api requrst with hooks
-    const { example, isLoading, error } = useGetProducts();
+    // const { example, isLoading, error } = useGetProducts();
     console.log(process.env.REACT_APP_API_HOST);
 
     const [tabIndex, setTabIndex] = useState<number>(0);
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-    if (error) {
-        return <div>{error}</div>;
-    }
+    // if (isLoading) {
+    //     return <div>Loading...</div>;
+    // }
+    // if (error) {
+    //     return <div>{error}</div>;
+    // }
 
     return (
         <>
             <Box>
                 <VStack spacing="18px">
-                    {example?.data}
+                    {/* {example?.data} */}
                     <ImageList display='one' size="300px" data_list={fakeDatas} />
                     <VStack pt="20px" w="100%" px="10px">
                         <Button w="100%"> 상단 띠배너 영역 </Button>
