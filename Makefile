@@ -1,3 +1,6 @@
+rebuild:
+	docker-compose --env-file ./config/.env.dev up --build
+
 conf:
 	docker-compose --env-file ./config/.env.dev config
 
