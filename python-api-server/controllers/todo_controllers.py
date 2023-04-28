@@ -10,7 +10,9 @@ class TodoModelController:
 
     @staticmethod
     def create_todo(data):
-        todo = TodoModel(title=data['title'], description=data.get('description'), done=False)
+        todo = TodoModel(title=data['title'], description=data.get('description'), done=False, 
+                         image_url=data.get('image_url')
+                         )
         db.session.add(todo)
         db.session.commit()
         return jsonify(todo.to_dict())

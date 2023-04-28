@@ -8,11 +8,13 @@ class TodoModel(db.Model):
     title = db.Column(db.String(80))
     description = db.Column(db.String(80))
     done = db.Column(db.Boolean)
+    image_url = db.Column(db.String(150))
 
-    def __init__(self, title, description, done):
+    def __init__(self, title, description, done, image_url):
         self.title = title
         self.description = description
         self.done = done
+        self.image_url = image_url
 
     def to_dict(self):
         return {
@@ -20,4 +22,5 @@ class TodoModel(db.Model):
             'title': self.title,
             'description': self.description,
             'done': self.done,
+            'image_url': self.image_url,
         }
