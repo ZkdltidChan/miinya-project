@@ -1,4 +1,10 @@
 import { GridItemProps } from "@chakra-ui/react";
+export type RoleProps = {
+    // [key: string]: any;
+    required: boolean;
+    message: string;
+}
+
 export type FrmProps = {
     [key: string]: any;
 }
@@ -7,10 +13,15 @@ export type FormDataProps = {
     [key: string]: any;
 }
 
+export type ImageUploadProps = {
+    isRequired: boolean | undefined;
+    setImageURL: React.Dispatch<React.SetStateAction<any>>;
+}
+
 export type FormItemsProps = {
     col: GridItemProps["colSpan"];
     form: any;
-    formData: FormDataProps;
+    role?: RoleProps;
     frm: FrmProps;
     setFormData: React.Dispatch<React.SetStateAction<any>>;
 }

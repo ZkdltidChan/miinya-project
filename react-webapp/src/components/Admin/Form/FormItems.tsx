@@ -1,22 +1,29 @@
-import { Button, FormControl, FormLabel, Checkbox, HStack, Input, InputGroup, InputRightElement, NumberInput, Switch, Textarea, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { Button, FormControl, FormLabel, Checkbox, HStack, Input, InputGroup, InputRightElement, NumberInput, Switch, Textarea, VStack, Container } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { FormDataProps, FormItemsProps } from "./types";
-
+import { ImageUpload } from "./ImageUpload";
 
 export const FormItems = ({
-    col,
     form,
-    formData,
     frm,
+    role,
     setFormData,
+
 }: FormItemsProps) => {
     // Password
-    const [passwordShow, setPasswordShow] = useState(false)
+    const [passwordShow, setPasswordShow] = useState<boolean>(false)
+    const [imgUrl, setImgUrl] = useState<string | undefined>(undefined)
     const handleShowPassword = () => setPasswordShow(!passwordShow)
 
     // Checkbox
     const [checkedItems, setCheckedItems] = useState([false, false])
 
+    useEffect(() => {
+        if (imgUrl) {
+            setFormData((prev: FormDataProps) => ({ ...prev, [frm.key]: imgUrl }))
+        }
+      }, [imgUrl])
+    
     const renderFormItem = () => {
         switch (frm.type) {
             case 'checkbox':
@@ -44,7 +51,10 @@ export const FormItems = ({
                 )
             case 'img':
                 return (
-                    <img src={formData[frm.key]} />
+                    <>
+                        {/* <ImageUpload setImageURL={(e) => { setFormData((prev: FormDataProps) => ({ ...prev, [frm.key]: e })); }} /> */}
+                        <ImageUpload setImageURL={setImgUrl} isRequired={role?.required}/>
+                    </>
                 )
             case 'switch':
                 return (
@@ -92,8 +102,8 @@ export const FormItems = ({
         }
     }
     return (
-        <FormControl p={1}>
-            <FormLabel>{frm.label}</FormLabel>
+        <FormControl p={1} isRequired={role?.required}>
+            <FormLabel >{frm.label}</FormLabel>
             {renderFormItem()}
         </FormControl>
     )

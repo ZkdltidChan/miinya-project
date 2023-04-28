@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, Heading, HStack, useToast } from '@chakra-ui/react';
-import { FormItems } from './form_items';
+import { FormItems } from './FormItems';
 import axios from 'axios';
 import { FormProps, FormDataProps, FormTypeProps, FrmProps } from './types';
 import { Link, useNavigate } from 'react-router-dom';
-
+import useAxios from '../../../hooks/useAxios';
 export const Form: React.FC<FormProps> = (props) => {
+    const { fetchData, response, isLoading, error } = useAxios()
+
     const navigate = useNavigate();
     const toast = useToast()
     // default the props
@@ -38,50 +40,56 @@ export const Form: React.FC<FormProps> = (props) => {
     }
 
     const [form, setForm] = useState(() => initForm(formType, formData));
-    const [isLoading, setIsLoading] = useState(false);
     const frmRef = useRef(null);
     useEffect(() => {
         setForm(initForm(formType, formData));
+        console.log(form)
     }, []);
 
 
-    const onSubmit = async (e: any) => {
-        setIsLoading(true);
-        console.log(form)
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         if (form.id && form.id > 0) {
             // DO UPDATE
             // const res = await axios.put(subUrl, form)
         } else {
-            try {
-                const response = await axios.post(api, form)
-                console.log(response.data);
-            } catch (error) {
-                console.error(error);
+            fetchData('POST', api, form)
+            if (response && !error) {
+                toast({
+                    title: totastTitle,
+                    position: 'top',
+                    description: totastDescription,
+                    status: 'success',
+                    duration: 9000,
+                    isClosable: true,
+                })
+            } else {
+                toast({
+                    title: 'Error!!',
+                    position: 'top',
+                    description: error,
+                    status: 'error',
+                    duration: 9000,
+                    isClosable: true,
+                })
             }
         }
-        toast({
-            title: totastTitle,
-            position: 'top', 
-            description: totastDescription,
-            status: 'success',
-            duration: 9000,
-            isClosable: true,
-          })
-        setIsLoading(false);
+
     }
 
     return (
         <Box p={5}>
             <form
                 ref={frmRef}
+                onSubmit={handleSubmit}
             >
                 {title && <Heading textAlign='center'>{title}</Heading>}
                 {formType.map((frm) => (
                     <FormItems
                         key={frm.key}
                         col={5}
+                        role={rules[frm.key]}
                         frm={frm}
-                        formData={formData}
                         form={form}
                         setFormData={setForm}
                     // subUrl={subUrl}
@@ -95,13 +103,13 @@ export const Form: React.FC<FormProps> = (props) => {
                 <HStack justify='center'>
                     <Button onClick={() => navigate(-1)}>Back</Button>
                     {
-                            hasDelete && form['id'] && (
-                                <Button colorScheme='red'> Delete </Button>
+                        hasDelete && form['id'] && (
+                            <Button colorScheme='red'> Delete </Button>
                         )
                     }
                     {
                         hasUpdate && (
-                            <Button isLoading={isLoading} onClick={onSubmit}>
+                            <Button isLoading={isLoading} type="submit">
                                 {form.id ? 'Update' : 'Create'}
                             </Button>
                         )

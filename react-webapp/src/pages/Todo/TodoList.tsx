@@ -1,10 +1,14 @@
 import { } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
-import useGetAxios from '../../hooks/useGetAxios';
+import useAxios from '../../hooks/useAxios';
 import { Table } from '../../components/Admin/Table/Table';
 
 export default () => {
-    const { response, isLoading, error } = useGetAxios('/api/v1/todos')
+    const { fetchData, response, isLoading, error } = useAxios()
+    useEffect(() => {
+        fetchData('GET', '/api/v1/todos')
+    }, [])
+
     return (
         <>
             <Table
@@ -31,7 +35,13 @@ export default () => {
                         Header: 'Description',
                         accessor: 'description',
                         key: 'description',
-                    }]}
+                    },
+                    {
+                        Header: 'Image',
+                        accessor: 'image_url',
+                        key: 'image_url',
+                    },
+                ]}
                 pageSize={10}
                 totalCount={20}
                 isLoading={isLoading}
