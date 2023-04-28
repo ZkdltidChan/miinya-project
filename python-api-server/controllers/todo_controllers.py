@@ -10,7 +10,7 @@ class TodoModelController:
 
     @staticmethod
     def create_todo(data):
-        todo = TodoModel(title=data['title'], description=data.get('description'), completed=False)
+        todo = TodoModel(title=data['title'], description=data.get('description'), done=False)
         db.session.add(todo)
         db.session.commit()
         return jsonify(todo.to_dict())
@@ -25,7 +25,7 @@ class TodoModelController:
         todo = TodoModel.query.get_or_404(id)
         todo.title = data['title']
         todo.description = data.get('description')
-        todo.completed = data.get('completed', False)
+        todo.done = data.get('done', False)
         db.session.commit()
         return jsonify(todo.to_dict())
 

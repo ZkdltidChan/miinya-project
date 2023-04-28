@@ -19,6 +19,5 @@ class TodoModel(db.Model):
             'id': self.id,
             'title': self.title,
             'description': self.description,
-            'completed': self.completed,
-            'created_at': self.created_at.isoformat()
+            'done': self.done,
         }
