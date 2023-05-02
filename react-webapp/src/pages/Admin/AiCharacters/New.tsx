@@ -1,23 +1,28 @@
 import { Box, Button, Container, HStack, Image, Text, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, Heading, Divider } from '@chakra-ui/react'
-import { Form } from '../../components/Admin/Form/Form';
+import { useEffect } from 'react';
+import { AI_CHARACTERS_URL } from '../../../api/config';
+import { Form } from '../../../components/Admin/Form/Form';
+import useAxios from '../../../hooks/useAxios';
+
 
 export default () => {
     return (
         <>
             <Container w={['xs', 'md']} shadow='xl' p={5} rounded='35px'>
                 <Form
-                    api='/api/v1/todos'
+                    callbackUrl='/admin/ai_characters'
+                    api={AI_CHARACTERS_URL}
                     hasUpdate={true}
-                    title="Todo"
+                    title="Ai Characters New"
                     rules={
-                        { title: { required: true, message: 'Please insert', trigger: 'onSubmit' }, }
+                        { name: { required: true, message: 'Please insert', trigger: 'onSubmit' }, }
                     }
                     formType={[
                         {
-                            label: 'Title',
-                            key: 'title',
+                            label: 'Name',
+                            key: 'name',
                             type: 'text',
-                            placeholder: 'Enter your title',
+                            placeholder: 'Enter the characters name',
                         },
                         {
                             label: 'Description',
@@ -27,10 +32,10 @@ export default () => {
                             placeholder: 'Enter your description',
                         },
                         {
-                            label: 'Image',
-                            key: 'image_url',
-                            type: 'image',
-                            prop: 'image_url',
+                            label: 'Character profile',
+                            key: 'profile_image',
+                            type: 'singleImage',
+                            prop: 'profile_image',
                         },
                     ]}
                     formData={{}}

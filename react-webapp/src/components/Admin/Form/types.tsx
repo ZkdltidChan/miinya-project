@@ -13,9 +13,15 @@ export type FormDataProps = {
     [key: string]: any;
 }
 
+
+export type FormValueProps = {
+    text: string;
+    value: number;
+}
+
 export type ImageUploadProps = {
     isRequired: boolean | undefined;
-    setImageURL: React.Dispatch<React.SetStateAction<any>>;
+    maxCount: number;
 }
 
 export type FormItemsProps = {
@@ -27,14 +33,15 @@ export type FormItemsProps = {
 }
 
 export type FormTypeProps = {
-    type: 'switch' | 'text' | 'number' | 'password' | 'editor' | 'date' | 'img';
+    type: 'switch' | 'text' | 'number' | 'password' | 'editor' | 'date' | 'image' | 'singleImage' |'options';
     label?: string;
     key: string;
     placeholder?: string;
     prop?: any;
+    values?: FormValueProps[];
 }
 
-export type FormProps = {
+export interface FormProps<T> {
     title?: string;
     isNew?: boolean;
     rules?: any;
@@ -50,4 +57,7 @@ export type FormProps = {
     hasToast?: boolean;
     totastTitle?: string;
     totastDescription?: string;
+    submitButtonTitle?: string,
+    updateButtonTitle?: string,
+    deleteButtonTitle?: string,
 }

@@ -1,5 +1,6 @@
-import { Link as RouteLink } from "react-router-dom"
-import { AddIcon, HamburgerIcon, SearchIcon } from "@chakra-ui/icons"
+import { Link as RouteLink, useNavigate } from "react-router-dom"
+import { HamburgerIcon, SearchIcon } from "@chakra-ui/icons"
+import { MdAdd, MdPeople } from "react-icons/md"
 import {
   Box,
   HStack,
@@ -32,29 +33,50 @@ type NavBarProps = {
   leftItems?: Router[]
 }
 
-export const NavBar = () => (
-  <Box bg="pink.300" w="100%">
-    <HStack p={1} justify="space-between">
-      <Heading as={RouteLink} to='' color="white">Logo</Heading>
-      <HStack>
-        <Link color='white' as={RouteLink} to='/todo'>
-          Todo
-        </Link>
-        <IconButton variant="ghost" icon={<SearchIcon color="white" />} aria-label={""} />
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            aria-label='Options'
-            icon={<HamburgerIcon color="white" />}
-            variant='ghost'
+export const NavBar = () => {
+  const navigate = useNavigate()
+  return (
+    < Box bg="pink.300" w="100%" >
+      <HStack p={1} justify="space-between">
+        <Heading as={RouteLink} to='' color="white">Logo</Heading>
+        <HStack>
+          {/* <Link color='white' as={RouteLink} to='/todo'>
+            Todo
+          </Link> */}
+          <IconButton
+            variant="ghost"
+            icon={<SearchIcon color="white" />}
+            aria-label={""}
+            _hover={{ bg: 'pink.200' }}
           />
-          <MenuList>
-            <MenuItem icon={<AddIcon />} command='⌘T'>
-            </MenuItem>
-          </MenuList>
-        </Menu>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label='Options'
+              icon={<HamburgerIcon color="white" />}
+              variant='ghost'
+              _hover={{ bg: 'pink.200' }}
+            />
+
+            <MenuList>
+              <MenuItem onClick={() => { navigate('/todo') }} icon={<MdAdd />}>
+                Todo
+              </MenuItem>
+              <MenuItem onClick={() => { navigate('/admin/ai_characters') }} icon={<MdPeople />}>
+                Ai Characters Manger
+              </MenuItem>
+              <MenuItem onClick={() => { navigate('/admin/levels') }} icon={<MdAdd />}>
+                Levels Manger
+              </MenuItem>
+              <MenuItem onClick={() => { navigate('/admin/tabs') }} icon={<MdAdd />}>
+                Tabs
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </HStack>
       </HStack>
-    </HStack>
-  </Box>
-)
+    </Box >
+  )
+}
+
 

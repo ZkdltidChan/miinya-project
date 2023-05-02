@@ -1,7 +1,21 @@
-import { Button, FormControl, FormLabel, Checkbox, HStack, Input, InputGroup, InputRightElement, NumberInput, Switch, Textarea, VStack, Container } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { FormDataProps, FormItemsProps } from "./types";
-import { ImageUpload } from "./ImageUpload";
+import { Button, FormControl, FormLabel, Checkbox, HStack, Input, InputGroup, InputRightElement, NumberInput, Switch, Textarea, VStack, Container, Select } from "@chakra-ui/react";
+import { createContext, useEffect, useState } from "react";
+import { FormDataProps, FormItemsProps, FormValueProps } from "./types";
+// import { ImageUpload } from "./ImageUpload";
+import { MutipleImageUploader } from "./ImageUploader";
+
+
+export const FormItemsContext = createContext<FormDataProps>({
+    setImageIsUploading: (value: boolean) => { },
+    setImageUrlList: (value: string[]) => { },
+    imageUrlList: [] as string[],
+    imgIsUploading: false,
+    setFormData: (value: FormDataProps) => { },
+    form: {},
+    frm: {},
+    role: {},
+});
+
 
 export const FormItems = ({
     form,
@@ -12,18 +26,12 @@ export const FormItems = ({
 }: FormItemsProps) => {
     // Password
     const [passwordShow, setPasswordShow] = useState<boolean>(false)
-    const [imgUrl, setImgUrl] = useState<string | undefined>(undefined)
     const handleShowPassword = () => setPasswordShow(!passwordShow)
-
+    // Image Upload
+    const [imgIsUploading, setImageIsUploading] = useState(false);
+    const [imageUrlList, setImageUrlList] = useState<string[]>([]);
     // Checkbox
-    const [checkedItems, setCheckedItems] = useState([false, false])
 
-    useEffect(() => {
-        if (imgUrl) {
-            setFormData((prev: FormDataProps) => ({ ...prev, [frm.key]: imgUrl }))
-        }
-      }, [imgUrl])
-    
     const renderFormItem = () => {
         switch (frm.type) {
             case 'checkbox':
@@ -49,11 +57,22 @@ export const FormItems = ({
                         </InputRightElement>
                     </InputGroup>
                 )
-            case 'img':
+            case 'image':
                 return (
                     <>
-                        {/* <ImageUpload setImageURL={(e) => { setFormData((prev: FormDataProps) => ({ ...prev, [frm.key]: e })); }} /> */}
-                        <ImageUpload setImageURL={setImgUrl} isRequired={role?.required}/>
+                        <MutipleImageUploader
+                            maxCount={5}
+                            isRequired={role?.required}
+                        />
+                    </>
+                )
+            case 'singleImage':
+                return (
+                    <>
+                        <MutipleImageUploader
+                            maxCount={1}
+                            isRequired={role?.required}
+                        />
                     </>
                 )
             case 'switch':
@@ -99,12 +118,40 @@ export const FormItems = ({
                         }}
                     />
                 )
+            case 'options':
+                return (
+                    <Select
+                        placeholder={frm.placeholder}
+                        value={form[frm.key]}
+                        onChange={(e) => {
+                            setFormData((prev: FormDataProps) => ({ ...prev, [frm.key]: e.target.value }));
+                        }}
+                    >
+                        {frm.values?.map((item: FormValueProps) => {
+                            return (
+                                <option value={item.value}>{item.text}</option>)
+                        }
+                        )}
+
+                    </Select>
+                )
         }
     }
     return (
-        <FormControl p={1} isRequired={role?.required}>
-            <FormLabel >{frm.label}</FormLabel>
-            {renderFormItem()}
-        </FormControl>
+        <FormItemsContext.Provider value={{
+            setImageIsUploading: setImageIsUploading,
+            setImageUrlList: setImageUrlList,
+            imageUrlList: imageUrlList,
+            imgIsUploading: imgIsUploading,
+            form: form,
+            frm: frm,
+            role: role,
+            setFormData: setFormData,
+        }}>
+            <FormControl p={1} isRequired={role?.required}>
+                <FormLabel >{frm.label}</FormLabel>
+                {renderFormItem()}
+            </FormControl>
+        </FormItemsContext.Provider>
     )
 }

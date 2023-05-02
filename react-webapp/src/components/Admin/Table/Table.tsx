@@ -105,6 +105,7 @@ export const Table: React.FC<TableProps> = (props) => {
                             return (
                                 <Tr {...row.getRowProps()}>
                                     {row.cells.map((cell) => {
+
                                         return (
                                             <Td {...cell.getCellProps()}>
                                                 {cell.render('Cell')}

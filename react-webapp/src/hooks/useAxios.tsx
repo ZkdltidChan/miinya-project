@@ -2,10 +2,40 @@ import { useState, useEffect } from "react";
 import axios, { AxiosHeaders, Method, AxiosProgressEvent } from 'axios';
 
 
-interface Response {
-  // code: 
-  data: any[] | any;
+type fetchDataProps = {
+  method: Method,
+  url: string,
+  data?: any,
+  headers?: {},
 }
+
+interface UseAxiosReturn<T> {
+  isLoading: boolean
+  error: string;
+  fetchData: any;
+  response: T | undefined;
+  
+  uploadPercent: number
+  multipleFetchData:any;
+  responseList: T[] | [];
+  uploadPercentList: number[]
+}
+
+interface Response<T> {
+  // statusCode: number;
+  data: T[];
+  // error?: string;
+}
+
+// type dataProps = {
+//   [key: string]: any;
+// }
+
+// const initResponse: Response<dataProps> = {
+//   statusCode: 0,
+//   data: [{'test': 'test'}],
+//   error: "",
+// }
 
 // type headers = {
 //   ContentType?: "application/json"|"multipart/form-data"| "application/x-www-form-urlencoded",
@@ -13,13 +43,39 @@ interface Response {
 // };
 
 
-const useAxios = () => {
-  const [response, setResponse] = useState<Response>();
+// const useAxiosExecution = <T>({
+//   method,
+//   url,
+//   config,
+// }: AxiosProps): [
+//   {
+//     response: T | undefined;
+//     error: string;
+//     loading: boolean;
+//   },
+//   () => void
+// ] 
+
+const useAxios = <T,>(): UseAxiosReturn<T> => {
+  // const [response, setResponse] = useState<Response>(initResponse);
+  const [response, setResponse] = useState<T>();
+  const [responseList, setResponseList] = useState<T[]>([]);
   const [uploadPercent, setUploadPercent] = useState<number>(0);
+  const [uploadPercentList, setUploadPercentList] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState("");
 
-  const fetchData = async (method: Method, url: string, data?: any, headers?: {},) => {
+  const fetchData = async (
+    method: Method,
+    url: string,
+    data?: any,
+    headers?: {},
+    onMutuplyUploadProgress?: {
+      list: number[],
+      set: React.Dispatch<React.SetStateAction<number[]>>
+      index: number,
+    }
+  ) => {
     setIsLoading(true);
     const axiosConfig = {
       method: method,
@@ -36,19 +92,87 @@ const useAxios = () => {
         } else {
           setUploadPercent(percentCompleted);
         }
+        if (onMutuplyUploadProgress &&
+          onMutuplyUploadProgress.list &&
+          onMutuplyUploadProgress.index &&
+          onMutuplyUploadProgress.set) {
+          const newUploadPercent = [...onMutuplyUploadProgress.list];
+          newUploadPercent[onMutuplyUploadProgress.index] = percentCompleted;
+
+          console.log(
+            'index:', onMutuplyUploadProgress.index,
+            'percentCompleted: ', percentCompleted,
+            'newUploadPercent: ', newUploadPercent,
+            'len:', newUploadPercent.length
+          )
+          // if (percentCompleted > 80) {
+          //   newUploadPercent[onMutuplyUploadProgress.index] = 80;
+          // } else {
+          //   newUploadPercent[onMutuplyUploadProgress.index] = percentCompleted;
+          // }
+          onMutuplyUploadProgress.set(newUploadPercent)
+        }
       },
     };
     try {
-      const result = await axios(axiosConfig);
-      setResponse({ data: result.data });
+      console.log(axiosConfig.data)
+      const result = await axios<T>(axiosConfig);
+      
+      setResponse(result.data);
+      setUploadPercent(100)
     } catch (error) {
       console.log(error)
       setError('An error occurred while fetching the api.');
+      setUploadPercent(0)
     }
-    setUploadPercent(100)
     setIsLoading(false);
   };
-  return { fetchData, response, isLoading, error, uploadPercent };
+
+  // mutiple fetch data with diffrent config
+  const multipleFetchData = async (
+    method: Method,
+    url: string,
+    datas: any[],
+    headers?: {},
+  ) => {
+    setIsLoading(true);
+    try {
+      setUploadPercentList(new Array(datas.length).fill(0));
+      const responses = await axios.all(
+        datas.map((data, index) => {
+          const axiosConfig = {
+            method: method,
+            url: url,
+            headers: headers,
+            data: data,
+            onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+              setUploadPercent(0);
+              const loaded = progressEvent.loaded;
+              const total = progressEvent.total || 0;
+              const percentCompleted = Math.round((loaded * 100) / total);
+              const newUploadPercentList = [...uploadPercentList];
+              newUploadPercentList[index] = percentCompleted;
+              setUploadPercentList(newUploadPercentList);
+            }
+          }
+          return axios<T>(axiosConfig)
+        })
+      );
+      console.log(responses)
+      const responsesFormat = responses.map((response) => (response.data));
+      setResponseList(responsesFormat);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
+  };
+  useEffect(() => {
+  }, [responseList]);
+  return {
+    isLoading, error,
+    fetchData, response, uploadPercent,
+    multipleFetchData, responseList, uploadPercentList,
+  };
 };
 
 export default useAxios;

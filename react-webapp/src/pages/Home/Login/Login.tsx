@@ -1,6 +1,6 @@
 import { Box, Button, Container, HStack, Image, Text, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, Heading, Divider } from '@chakra-ui/react'
 import { useState } from 'react';
-import { Form } from '../../components/Admin/Form/Form';
+import { Form } from '../../../components/Admin/Form/Form';
 
 export const Login = () => {
     return (

@@ -1,8 +1,12 @@
+import { CellProps } from "react-table";
+
 export type ColumnProps = {
     Header: string;
     accessor: string;
     key: string;
     width?: string;
+    type?: string;
+    Cell?: (cellProps: CellProps<any>) => JSX.Element; 
 }
 
 export type TableProps = {

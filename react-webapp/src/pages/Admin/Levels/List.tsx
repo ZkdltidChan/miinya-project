@@ -1,13 +1,15 @@
-import { } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
-import useAxios from '../../hooks/useAxios';
-import { Table } from '../../components/Admin/Table/Table';
-import { TodoResponseProps, TODO_URL } from '../../api/config';
-
+import useAxios from '../../../hooks/useAxios';
+import { Table } from '../../../components/Admin/Table/Table';
+import { useNavigate } from 'react-router-dom'
+import { LevelsResponseProps, LEVELS_URL } from '../../../api/config';
 export default () => {
-    const { fetchData, response, isLoading, error } = useAxios<TodoResponseProps>()
+
+    const navigate =  useNavigate()
+    const { fetchData, response, isLoading, error } = useAxios<LevelsResponseProps>()
     useEffect(() => {
-        fetchData('GET', TODO_URL)
+        fetchData('GET', LEVELS_URL)
     }, [])
 
     return (
@@ -28,26 +30,24 @@ export default () => {
                         // width: '10%'
                     },
                     {
-                        Header: 'title',
-                        accessor: 'title',
-                        key: 'title',
+                        Header: 'Name',
+                        accessor: 'name',
+                        key: 'name',
                     },
                     {
-                        Header: 'Description',
-                        accessor: 'description',
-                        key: 'description',
-                    },
-                    {
-                        Header: 'Image',
-                        accessor: 'image_url',
-                        key: 'image_url',
+                        Header: 'Edit',
+                        accessor: 'edit',
+                        key: 'edit',
+                        Cell: ({row}) => (
+                            <Button onClick={()=>{navigate(`/admin/levels/edit/${row.original.id}`)} }>Edit</Button>
+                        ),
                     },
                 ]}
                 pageSize={10}
                 totalCount={20}
                 isLoading={isLoading}
                 currentPage={1}
-                subUrl='todo'
+                subUrl='admin/levels'
             />
         </>
     )
