@@ -1,7 +1,8 @@
 from common.db import db
 from datetime import datetime
+from models.base_model import BaseModel
 
-class TodoModel(db.Model):
+class TodosModel(BaseModel):
     # if none, the table name will be the class name in lowercase
     __tablename__ = 'todos'
     id = db.Column(db.Integer, primary_key=True)
@@ -10,7 +11,7 @@ class TodoModel(db.Model):
     done = db.Column(db.Boolean)
     image_url = db.Column(db.String(150))
 
-    def __init__(self, title, description, done, image_url):
+    def __init__(self, title, description, done=False, image_url=""):
         self.title = title
         self.description = description
         self.done = done

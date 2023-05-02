@@ -1,3 +1,4 @@
+from common.response_handler import response_handler
 from flask import Blueprint, jsonify, request
 from common.s3_uploader import upload_file
 upload_api = Blueprint('upload_api', __name__)
@@ -16,4 +17,4 @@ def upload_image():
         return error, 400
     if not uri:
         return 'Upload failed.', 400
-    return jsonify({'uri': uri})
+    return jsonify(response_handler({'uri': uri}))
