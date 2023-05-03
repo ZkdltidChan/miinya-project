@@ -1,6 +1,10 @@
-def response_handler(data, status_code=200, error_message=None):
+def response_handler(data):
+    return data
+
+def paginate_response_handler(data_list, total, pages, page):
     return {
-        'status_code': status_code,
-        'data': data,
-        'error_message':  error_message,
+        'total': total,
+        'pages': pages,
+        'page': page,
+        'data_list': data_list,
     }

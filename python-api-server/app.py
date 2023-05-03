@@ -21,13 +21,19 @@ from flask_migrate import Migrate
 
 from routers.todo_routers import todo_api
 from routers.upload_routers import upload_api
-import os
+from routers.ai_characters_routers import ai_characters_api
+from routers.ai_character_images_routers import ai_character_images_api
+from routers.levels_routers import levels_api
+from routers.tabs_router import tabs_api
+import os, sys
+import logging
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+app.logger.setLevel(logging.DEBUG)
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
 CORS(app)  # allow all origins all methods.
 CORS(app, resources={r'*': {'origins': '*'}})
 
@@ -37,6 +43,10 @@ def hello():
 
 app.register_blueprint(todo_api, url_prefix='/api/v1')
 app.register_blueprint(upload_api, url_prefix='/api/v1')
+app.register_blueprint(ai_character_images_api, url_prefix='/api/v1')
+app.register_blueprint(ai_characters_api, url_prefix='/api/v1')
+app.register_blueprint(levels_api, url_prefix='/api/v1')
+app.register_blueprint(tabs_api, url_prefix='/api/v1')
 
 db.init_app(app)
 migrate = Migrate(app, db)
